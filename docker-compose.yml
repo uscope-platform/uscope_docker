@@ -23,6 +23,7 @@ services:
         command: python app.py DBG
         working_dir: /code
         ports:
+            - 21000:21000
             - 8123:5000
         networks:
             my-network:

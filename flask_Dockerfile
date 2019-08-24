@@ -2,4 +2,5 @@ FROM python:3
 RUN pip install flask
 RUN pip install flask-restful
 RUN pip install numpy
+RUN pip install pydevd-pycharm~=192.5728.105
 
