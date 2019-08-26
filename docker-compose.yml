@@ -4,7 +4,6 @@ services:
         image: nginx
         ports:
             - 80:80
-            - 5000:5000
         networks:
             - my-network
         volumes:
