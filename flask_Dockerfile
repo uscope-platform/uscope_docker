@@ -1,4 +1,4 @@
 FROM python:3
-RUN pip install flask flask-restful flask-jwt-extended numpy msal
+RUN pip install flask flask-restful flask-cors gunicorn numpy msal
 RUN pip install pydevd-pycharm~=192.5728.105
 
