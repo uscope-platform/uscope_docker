@@ -9,7 +9,7 @@ services:
             - my-network
         volumes:
             - ./nginx.conf:/etc/nginx/conf.d/default.conf
-            - /home/fils/git/uscope_frontend/dist:/sites/frontend  
+            - /home/fils/git/uscope_react/build:/sites/frontend  
     flask:
         build:
             context: ../
@@ -20,7 +20,7 @@ services:
             - /home/fils/git/uscope_server/:/code/
         environment:
             - GUNICORN_CMD_ARGS="" 
-        command: gunicorn -w 2 -b :5000 --log-level debug "app_factory:create_app(debug=True)"
+        command: gunicorn -c /code/gunicorn.conf "app_factory:create_app(debug=True)"
         working_dir: /code
         ports:
             - 21000:21000
