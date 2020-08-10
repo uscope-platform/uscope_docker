@@ -1,33 +1,41 @@
-version: '3'
+version: '2'
 services:
-    nginx:
-        image: nginx
+    client:
+        build: 
+            context: ../uscope_react
+            dockerfile: ./Dockerfile
+        image: client:latest
+        stdin_open: true
+        tty: true
+        networks: 
+            - external_network
         ports:
-            - 80:80
-            - 4999:4999
+            - 3004:3004
+        volumes: 
+            - /home/fils/git/uscope_react:/uscope_client
+    server:
+        build: ./server
+        stdin_open: true
+        tty: true
+        image: server:latest
         networks:
-            - my-network
-        volumes:
-            - ./nginx.conf:/etc/nginx/conf.d/default.conf
-            - /home/fils/git/uscope_react/build:/sites/frontend  
-    flask:
-        build:
-            context: ../
-            dockerfile: uscope_docker/flask_Dockerfile
-        image: flask:0.0.1
-        container_name: flask
-        volumes:
-            - /home/fils/git/uscope_server/:/code/
-        environment:
-            - GUNICORN_CMD_ARGS="" 
-        command: gunicorn -c /code/gunicorn.conf "app_factory:create_app(debug=True)"
-        working_dir: /code
+            - internal_network
+            - external_network
         ports:
-            - 21000:21000
-            - 8123:5000
+            - 8989:8989
+        volumes: 
+            - /home/fils/git/uscope_server:/server
+    redis:
+        build: ./redis
+        image: redis:latest
         networks:
-            my-network:
-                aliases:
-                    - flask-app
+            - internal_network
+            - external_network
+        ports:
+            - 6379:6379
 networks:
-    my-network:
+    internal_network:
+        driver: bridge
+        internal: true
+    external_network:
+        driver: bridge

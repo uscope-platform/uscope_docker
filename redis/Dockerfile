@@ -6,4 +6,4 @@ COPY dump.rdb /redis/dump.rdb
 
 RUN mkdir /var/log/redis
 RUN mkdir /var/run/redis
-CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+CMD [ "redis-server", "/redis/redis.conf" ]
