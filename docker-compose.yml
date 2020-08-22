@@ -23,6 +23,7 @@ services:
             - external_network
         ports:
             - 8989:8989
+            
         volumes: 
             - /home/fils/git/uscope_server:/server
     redis:
@@ -30,12 +31,22 @@ services:
         image: redis:latest
         networks:
             - internal_network
-            - external_network
         ports:
             - 6379:6379
+    driver:
+        build:
+            context: ../uscope_driver
+            dockerfile: ./Dockerfile
+        image: driver:latest
+        ports:
+            - 6666:6666
+        networks:
+            - internal_network
 networks:
     internal_network:
         driver: bridge
         internal: true
     external_network:
         driver: bridge
+
+        
