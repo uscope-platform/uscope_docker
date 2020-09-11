@@ -1,10 +1,11 @@
 version: '2'
 services:
     yocto:
-        image: yocto_repo:latest
+        image: yocto:latest
         stdin_open: true
         tty: true
         volumes: 
             - /software/yocto:/yocto_data
             - /fast_software:/fast_software
             - /software/HDFs:/HDFs
+            - /opt/Xilinx:/opt/Xilinx
