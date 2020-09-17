@@ -43,6 +43,14 @@ services:
             - 6666:6666
         networks:
             - internal_network
+        volumes:
+            - /lib/firmware:/lib/firmware
+            - /sys/class/fpga_manager:/sys/class/fpga_manager
+            - /dev/uio0:/dev/uio0
+            - /dev/mem:/dev/mem
+        privileged: true
+        
+
 networks:
     internal_network:
         driver: bridge
