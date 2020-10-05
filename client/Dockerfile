@@ -1,10 +1,7 @@
-FROM node:14.5
+FROM nginx
 
 WORKDIR /client
 
-COPY src ./src
-COPY public ./public
-COPY package.json .
+COPY build /usr/share/nginx/html
 
-RUN yarn install
 CMD ["yarn", "run", "start" ]

@@ -10,9 +10,10 @@ services:
         networks: 
             - external_network
         ports:
+            - 8002:80
             - 3004:3004
         volumes: 
-            - /home/fils/git/uscope_react:/uscope_client
+            - /home/root/uscope/uscope_react:/uscope_client
     server:
         build: ./server
         stdin_open: true
@@ -25,7 +26,7 @@ services:
             - 8989:8989
             
         volumes: 
-            - /home/fils/git/uscope_server:/server
+            - /home/root/uscope/uscope_server:/server
     redis:
         build: ./redis
         image: redis:latest
@@ -42,6 +43,12 @@ services:
             - 6666:6666
         networks:
             - internal_network
+        volumes:
+            - /lib/firmware:/lib/firmware
+            - /sys/class/fpga_manager:/sys/class/fpga_manager
+            - /dev/uio0:/dev/uio0
+            - /dev/mem:/dev/mem
+        privileged: true
 networks:
     internal_network:
         driver: bridge

@@ -25,6 +25,8 @@ RUN repo init -u git://github.com/Xilinx/yocto-manifests.git -b rel-v2020.1
 RUN repo sync
 RUN repo start rel-v2020.1 --all
 
+RUN cd sources && git clone -b zeus git://git.yoctoproject.org/meta-java
+
 # Apply patch to force microzed-zynq7 machine to use uboot-xlnx
 COPY microzed_compatibility.patch /yocto/sources/meta-xilinx/microzed_compatibility.patch
 RUN cd /yocto/sources/meta-xilinx && git apply microzed_compatibility.patch && rm microzed_compatibility.patch
