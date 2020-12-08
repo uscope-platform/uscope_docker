@@ -32,6 +32,8 @@ services:
         image: redis:latest
         networks:
             - internal_network
+            - external_network
+
         ports:
             - 6379:6379
     driver:
@@ -46,7 +48,7 @@ services:
         volumes:
             - /lib/firmware:/lib/firmware
             - /sys/class/fpga_manager:/sys/class/fpga_manager
-            - /dev/uio0:/dev/uio0
+            - /dev/uCube_dev_0:/dev/uCube_dev_0
             - /dev/mem:/dev/mem
         privileged: true
 networks:
