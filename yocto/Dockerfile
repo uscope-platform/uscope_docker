@@ -42,6 +42,6 @@ USER fils
 RUN echo "source /fast_software/Vitis/2020.1/settings64.sh"  >> /home/fils/.bashrc
 
 
-ENTRYPOINT [ ". /yocto/setupsdk" ]
+#ENTRYPOINT [ "/yocto/setupsdk" ]
 
 CMD [ "/bin/bash" ]

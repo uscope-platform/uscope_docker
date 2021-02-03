@@ -11,3 +11,5 @@ kubernetes/
 server/fcore_has/
 
 server/libfchas.so
+
+.vscode/settings.json
