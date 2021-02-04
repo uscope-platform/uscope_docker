@@ -41,7 +41,7 @@ configs. Moreover the kernel needs to be custom built regardless in order to com
 
     `make -j15 ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- INSTALL_MOD_PATH=../modules modules_install`
 
-7. generate fit image with new kernel and device tree with the files in fitimage_tools
+7. generate fit image with new kernel and device tree with the files in fitimage_tools (USE THE CORRECT DEVICE TREE WITH SUPPORT FOR ucube lkm)
 
     `mkimage -f fitImage.its fit.itb`
 
