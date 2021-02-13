@@ -1,0 +1,11 @@
+[Match]
+Name=eth0
+
+[Network]
+DHCP=yes
+DNS=8.8.8.8
+DNS=8.8.4.4
+
+[Address]
+Label=eth0:0
+Address=10.0.0.6

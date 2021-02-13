@@ -1,0 +1,203 @@
+- hosts: uzed
+  remote_user: root
+  tasks:
+########################################################
+#             PREPARE HOST ENVIRONMENT                 #
+########################################################
+
+    - name: Install docker compose
+      pip:
+        name: docker-compose
+
+    - name: Creates ssh directory
+      file:
+        path: /home/root/.ssh
+        state: directory
+
+    - name: Copy ssh key for github
+      copy:
+        src: /home/fils/.ssh/id_ed25519
+        dest: /home/root/.ssh/id_ed25519
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Copy known hosts
+      copy:
+        src: /home/fils/git/uscope_docker/yocto/ansible/known_hosts
+        dest: /home/root/.ssh/known_hosts
+        owner: root
+        group: root
+        mode: preserve
+
+    - name: Clean old modules
+      file:
+        state: absent
+        path: /lib/modules/5.4.0-xilinx-v2020.1/kernel/
+    
+    - name: Recreate modules directory
+      file:
+        path: /lib/modules/5.4.0-xilinx-v2020.1/kernel/
+        state: directory
+
+    - name: copy over new modules
+      unarchive:
+        src: /home/fils/git/uscope_docker/yocto/ansible/modules.zip
+        dest: /lib/modules/5.4.0-xilinx-v2020.1/
+
+
+    - name: Creates ucube module directory
+      file:
+        path: /lib/modules/5.4.0-xilinx-v2020.1/kernel/uscope/
+        state: directory
+
+
+    - name: Copy ucube module
+      copy:
+        src: /home/fils/git/uscope_module/src/ucube_lkm.ko
+        dest: /lib/modules/5.4.0-xilinx-v2020.1/kernel/uscope/
+        owner: root
+        group: root
+        mode: preserve
+
+    - name: Run depmod
+      command: depmod
+
+    - name: Creates uscope directory
+      file:
+        path: /home/root/uscope
+        state: directory
+
+
+########################################################
+#             EJABLE SERVICES                          #
+########################################################
+
+
+    - name: Enable docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Enable containerd
+      systemd:
+        name: containerd
+        enabled: yes
+        state: started
+
+########################################################
+#             CLONE COMPONENTS                         #
+########################################################
+
+    - name: Clone uscope driver
+      git:
+        repo: git@github.com:filssavi/uscope_driver.git
+        dest: /home/root/uscope/uscope_driver
+
+    - name: Clone uscope server
+      git:
+        repo: git@github.com:filssavi/uscope_server.git
+        dest: /home/root/uscope/uscope_server
+
+    - name: Clone uscope docker
+      git:
+        repo: git@github.com:filssavi/uscope_docker.git
+        dest: /home/root/uscope/uscope_docker
+
+    - name: Clone uscope fcore_has
+      git:
+        repo: git@github.com:filssavi/fCore_has.git
+        dest: /home/root/uscope/fCore_has
+
+##############################################
+#          BUILD AND TRANSFER CLIENT         #
+##############################################
+
+    - name: build react app (on localhost as microzed is too slow)
+      delegate_to: localhost
+      command: yarn run build
+      args: 
+        chdir: /home/fils/git/uscope_react/
+
+    - name: Create archive for distribution
+      delegate_to: localhost
+      command: zip -r build.zip build/
+      args: 
+        warn: false
+        chdir: /home/fils/git/uscope_react/
+
+    - name: Creates uscope_react directory
+      file:
+        path:  /home/root/uscope/uscope_react/
+        state: directory
+
+    - name: copy over new client production build
+      unarchive:
+        src: /home/fils/git/uscope_react/build.zip
+        dest: /home/root/uscope/uscope_react/
+
+    - name: copy web server config
+      copy:
+        src:  /home/fils/git/uscope_react/nginx.conf
+        dest: /home/root/uscope/uscope_react
+        owner: root
+        group: root
+        mode: preserve
+
+    - name: copy client dockerfile
+      copy:
+        src:  /home/fils/git/uscope_react/Dockerfile
+        dest: /home/root/uscope/uscope_react
+        owner: root
+        group: root
+        mode: preserve
+
+########################################################
+#             BUILD CONTAINERS                         #
+########################################################
+    
+    - name: Prepare server build
+      command: bash copy_resources.sh
+      args: 
+        chdir: /home/root/uscope/uscope_docker/server
+      
+    - name: Build driver container
+      community.general.docker_image:
+        build:
+          path: /home/root/uscope/uscope_driver
+        name: driver
+        tag: latest
+        source: build
+
+    - name: Build redis container
+      community.general.docker_image:
+        build:
+          path: /home/root/uscope/uscope_docker/redis
+        name: redis
+        tag: latest
+        source: build
+    
+    - name: Build client container
+      community.general.docker_image:
+        build:
+          path: /home/root/uscope/uscope_react
+        name: client
+        tag: latest
+        source: build
+
+    - name: Build server container
+      community.general.docker_image:
+        build:
+          path: /home/root/uscope/uscope_docker/server
+        name: server
+        tag: latest
+        source: build
+
+    - name: Build client container
+      community.general.docker_image:
+        build:
+          path: /home/root/uscope/uscope_react
+        name: client
+        tag: latest
+        source: build

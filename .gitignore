@@ -13,3 +13,7 @@ server/fcore_has/
 server/libfchas.so
 
 .vscode/settings.json
+
+yocto/ansible/modules/
+
+yocto/ansible/modules.zip

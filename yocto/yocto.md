@@ -11,6 +11,13 @@ A custom meta layer does all the needed configurations in a single recipe
 TODO: 
     fix docker compose python dependencies
 
+1. Enable docker to start at boot
+    
+    `systemctl enable docker.service`
+    
+    `systemctl enable containerd.service`
+
+
 Kernel 
 -----------------
 
@@ -47,4 +54,36 @@ configs. Moreover the kernel needs to be custom built regardless in order to com
 
 7. copy the output modules into the proper location on the target filesystem
 
-    `cp -r /modules/lib/modules/5.4.0-xilinx-v2020.1/ /media/fils/root/lib/modules/5.4.0-xilinx-v2020.1 `
+    `cp -r modules/lib/modules/5.4.0-xilinx-v2020.1/ /media/fils/root/lib/modules `
+
+8. Compile the ucube_lkm module from sources
+
+9. move the ucube lkm module in /media/fils/root/lib/modules/5.4.0-xilinx-v2020.1/kernel/drivers/scope and reconstruct the dependency list
+
+    `depmod`
+
+
+
+Provvisioning
+-----------------------------------
+
+1. The following  python packages need to be installed for docker compose 
+
+    `pip3 install -Iv requests==2.14.2`
+
+    `pip3 install -Iv pyYAML==3.10`
+    
+    `pip3 install -Iv jsonschema==2.5.1`
+
+
+Uscope stack
+-----------------------------------
+
+1. Clone repos
+
+
+
+Ansible
+-------------------------------------
+
+ansible -i inventory uzed -m ping -u root
