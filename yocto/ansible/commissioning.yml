@@ -67,7 +67,7 @@
       file:
         path: /home/root/uscope
         state: directory
-
+  
 
 ########################################################
 #             ENABLE SERVICES                          #
@@ -94,21 +94,25 @@
       git:
         repo: git@github.com:filssavi/uscope_driver.git
         dest: /home/root/uscope/uscope_driver
+        accept_hostkey: yes
 
     - name: Clone uscope server
       git:
         repo: git@github.com:filssavi/uscope_server.git
         dest: /home/root/uscope/uscope_server
+        accept_hostkey: yes
 
     - name: Clone uscope docker
       git:
         repo: git@github.com:filssavi/uscope_docker.git
         dest: /home/root/uscope/uscope_docker
+        accept_hostkey: yes
 
     - name: Clone uscope fcore_has
       git:
         repo: git@github.com:filssavi/fCore_has.git
         dest: /home/root/uscope/fCore_has
+        accept_hostkey: yes
 
 ##############################################
 #          BUILD AND TRANSFER CLIENT         #
