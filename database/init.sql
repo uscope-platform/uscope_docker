@@ -165,10 +165,15 @@ create table app_settings
 	name text not null
 		constraint app_settings_pk
 			primary key,
-	value jsonb
+	value jsonb,
+	"user" text
+		constraint user_settings_key
+			references users
+				on update cascade on delete cascade
 );
 
 alter table app_settings owner to uscope;
 
 create unique index app_settings_name_uindex
 	on app_settings (name);
+
