@@ -27,14 +27,6 @@ services:
             
         volumes: 
             - /home/fils/git/uscope_server:/server
-    redis:
-        build: ./redis
-        image: redis:latest
-        networks:
-            - internal_network
-            - external_network
-        ports:
-            - 6379:6379
     database:
         build: ./database
         networks:
