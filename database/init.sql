@@ -23,19 +23,19 @@ SET search_path TO uscope;
 
 -- CREATE USERS TABLE
 
-create table uscope.users
+create table users
 (
-    username text not null
-        constraint users_pk
-            primary key,
-    pw_hash  text not null
+	username text not null
+		constraint users_pk
+			primary key,
+	pw_hash text not null,
+	role text not null
 );
 
-alter table users
-    owner to uscope;
+alter table users owner to uscope;
 
 create unique index users_username_uindex
-    on users (username);
+	on users (username);
 
 
 -- CREATE LOGIN_TOKENS TABLE
