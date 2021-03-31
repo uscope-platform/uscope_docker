@@ -87,3 +87,23 @@ Ansible
 -------------------------------------
 
 ansible -i inventory uzed -m ping -u root
+
+
+HTTPS commisioning
+--------------------------------------
+
+
+from https://blogg.bekk.no/how-to-sign-a-certificate-request-with-openssl-e046c933d3ae
+1) Generate CA key and certificate
+
+`openssl genrsa -des3 -out uscope_root.key 4096`
+
+`openssl req -new -x509 -days 10000 -key uscope_root.key -out uscope_root.crt`
+
+3) Generate the CSR 
+
+`openssl req -new -newkey rsa:4096 -nodes -keyout uscope_0.pem -out uscope_0_req.pem -subj "/C=IT/CN=localhost" -addext "subjectAltName = DNS:localhost"`
+
+4) Sign key
+
+`openssl ca -rand_serial -config ca.conf -out uscope_0.crt -infiles uscope_0_req.pem`

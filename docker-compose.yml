@@ -10,7 +10,8 @@ services:
         networks: 
             - external_network
         ports:
-            - 8002:80
+            - 80:80
+            - 443:443
             - 3004:3004
         volumes: 
             - /home/fils/git/uscope_react:/uscope_client

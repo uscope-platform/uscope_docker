@@ -174,19 +174,11 @@
         tag: latest
         source: build
 
-    - name: Build redis container
+    - name: Build database container
       community.general.docker_image:
         build:
-          path: /home/root/uscope/uscope_docker/redis
-        name: redis
-        tag: latest
-        source: build
-    
-    - name: Build client container
-      community.general.docker_image:
-        build:
-          path: /home/root/uscope/uscope_react
-        name: client
+          path: /home/root/uscope/uscope_docker/database
+        name: database
         tag: latest
         source: build
 
@@ -197,3 +189,20 @@
         name: server
         tag: latest
         source: build
+
+    - import_tasks: generate_cert.yml
+      vars:
+        cert_path: /home/root/uscope/uscope_react/certs
+  
+    - name: Build client container
+      community.general.docker_image:
+        build:
+          path: /home/root/uscope/uscope_react
+        name: client
+        tag: latest
+        source: build
+
+    - name: Delete server key to avoid leaks
+      file:
+        path: /home/root/uscope/uscope_react/certs/uscope_0.pem
+        state: absent
