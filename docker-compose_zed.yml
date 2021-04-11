@@ -5,8 +5,6 @@ services:
             context: ../uscope_react
             dockerfile: ./Dockerfile
         image: client:latest
-        stdin_open: true
-        tty: true
         networks: 
             - external_network
         ports:
@@ -30,6 +28,7 @@ services:
             - /home/root/uscope/uscope_server:/server
     database:
         build: ./database
+        image: database:latest
         networks:
             - internal_network
         ports: 
@@ -43,14 +42,16 @@ services:
         image: driver:latest
         ports:
             - 6666:6666
-        volumes: 
-            - /lib/firmware:/lib/firmware
-            - /sys/class/fpga_manager:/sys/class/fpga_manager
-            - /dev/uCube_dev_0:/dev/uCube_dev_0
-            - /dev/mem:/dev/mem
         networks:
             - internal_network
         privileged: true
+        volumes: 
+            - /lib/firmware:/lib/firmware
+            - /sys/class/fpga_manager:/sys/class/fpga_manager
+            - /dev/uscope_BUS_0:/dev/uscope_BUS_0
+            - /dev/uscope_BUS_1:/dev/uscope_BUS_1
+            - /dev/uscope_data:/dev/uscope_data
+            - /dev/mem:/dev/mem
 networks:
     internal_network:
         driver: bridge
