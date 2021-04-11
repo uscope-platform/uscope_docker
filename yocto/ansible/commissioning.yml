@@ -73,7 +73,6 @@
 #             ENABLE SERVICES                          #
 ########################################################
 
-
     - name: Enable docker
       systemd:
         name: docker
@@ -206,3 +205,6 @@
       file:
         path: /home/root/uscope/uscope_react/certs/uscope_0.pem
         state: absent
+
+    - name: Set up correct compose file
+      command: mv /home/root/uscope/uscope_docker/docker-compose_zed.yml /home/root/uscope/uscope_docker/docker-compose.yml
