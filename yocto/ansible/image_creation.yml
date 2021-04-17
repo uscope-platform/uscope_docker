@@ -1,0 +1,120 @@
+- hosts: localhost
+  vars:
+    image_user: fils
+    image_file: "/software/working_image.img"
+    loopback_device: /dev/loop29
+    boot_partition: "{{ loopback_device +'p1'}}"
+    root_partition: "{{ loopback_device +'p2'}}"
+    yocto_image_dir: /software/yocto/build/tmp/deploy/images/microzed-zynq7/
+
+  tasks:
+
+########################################################
+#             PREPARE IMAGE PARTITIONS                 #
+########################################################
+
+    - name: Create image file
+      command: dd if=/dev/zero of={{image_file}} bs=1024k seek=4096 count=0
+
+    - name: Attach image as loopback file
+      command: losetup {{loopback_device}} {{image_file}} 
+    
+    - name: Create boot partition
+      parted:
+        device: '{{ loopback_device }}'
+        number: 1
+        fs_type: fat32
+        flags: [ lba ]
+        state: present
+        part_end: 100MiB
+
+    - name: Create root partition
+      parted:
+        device: '{{ loopback_device }}'
+        number: 2
+        fs_type: ext4
+        state: present
+        part_start: 100MiB
+        part_end: 100%
+
+    - name: Detach image from loopback file
+      command: losetup -d {{loopback_device}}
+
+    - name: Attach image as loopback file with partitions
+      command: losetup --partscan {{loopback_device}} {{image_file}} 
+
+    - name: Create boot filesystem
+      command: mkfs.fat -F 32 {{boot_partition}}
+
+    - name: Create boot filesystem
+      command: mkfs.ext4 {{root_partition}}
+
+    - name: Create directory for boot partition
+      file:
+        path: boot_part
+        state: directory
+    
+    - name: Mount boot partition
+      command: mount {{boot_partition}} boot_part
+
+    - name: Create directory for root partition
+      file:
+        path: root_part
+        state: directory
+
+    - name: Mount root partition
+      command: mount {{root_partition}} root_part
+
+    - name: Create boot partition directory structure
+      file:
+        path: boot_part/boot/extlinux
+        state: directory
+
+    - name: Copy FSBL/u-boot
+      copy:
+        src: "{{yocto_image_dir + '/boot.bin'}}"
+        dest: boot_part
+    
+    - name: Copy Kenel
+      copy:
+        src: "{{yocto_image_dir + '/uImage'}}"
+        dest: boot_part/boot
+
+    - name: Copy device tree
+      copy:
+        src: "{{yocto_image_dir + '/microzed-zynq7-system.dtb'}}"
+        dest: boot_part/boot
+    
+    - name: Copy extlinux
+      copy:
+        src: "{{yocto_image_dir + '/extlinux.conf'}}"
+        dest: boot_part/boot/extlinux
+
+########################################################
+#             CLEAN UP THE MESS                        #
+########################################################
+
+    - name: unmount root partition
+      command: umount root_part
+
+    - name: unmount boot partition
+      command: umount boot_part
+
+    - name: Remove directory for boot partition
+      file:
+        path: boot_part
+        state: absent
+
+    - name: Remove directory for root partition
+      file:
+        path: root_part
+        state: absent
+
+    - name: Detach image from loopback file
+      command: losetup -d {{loopback_device}}
+
+    - name: Change file ownership, group and permissions
+      file:
+        path: "{{image_file}}"
+        owner: "{{image_user}}"
+        group: "{{image_user}}"
