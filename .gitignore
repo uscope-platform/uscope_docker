@@ -17,3 +17,5 @@ server/libfchas.so
 yocto/ansible/modules/
 
 yocto/ansible/modules.zip
+
+yocto/ansible/uscope_root.crt
