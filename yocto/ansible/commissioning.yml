@@ -45,24 +45,6 @@
         src: /home/fils/git/uscope_docker/yocto/ansible/modules.zip
         dest: /lib/modules/5.4.0-xilinx-v2020.1/
 
-
-    - name: Creates ucube module directory
-      file:
-        path: /lib/modules/5.4.0-xilinx-v2020.1/kernel/uscope/
-        state: directory
-
-
-    - name: Copy ucube module
-      copy:
-        src: /home/fils/git/uscope_module/src/ucube_lkm.ko
-        dest: /lib/modules/5.4.0-xilinx-v2020.1/kernel/uscope/
-        owner: root
-        group: root
-        mode: preserve
-
-    - name: Run depmod
-      command: depmod
-
     - name: Creates uscope directory
       file:
         path: /home/root/uscope
