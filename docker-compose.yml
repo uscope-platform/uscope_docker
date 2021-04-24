@@ -7,6 +7,8 @@ services:
         image: client:latest
         stdin_open: true
         tty: true
+        depends_on:
+            - server
         networks: 
             - external_network
         ports:
@@ -25,13 +27,20 @@ services:
             - external_network
         ports:
             - 8989:8989
-            
+        depends_on:
+            database:
+                condition: service_healthy
         volumes: 
             - /home/fils/git/uscope_server:/server
     database:
         build: ./database
         networks:
             - internal_network
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 3s
+            timeout: 5s
+            retries: 10
         ports: 
             - 5432:5432
         environment:

@@ -7,6 +7,8 @@ services:
         image: client:latest
         networks: 
             - external_network
+        depends_on:
+            - server
         ports:
             - 80:80
             - 443:443
@@ -23,7 +25,9 @@ services:
             - external_network
         ports:
             - 8989:8989
-            
+        depends_on:
+            database:
+                condition: service_healthy
         volumes: 
             - /home/root/uscope/uscope_server:/server
     database:
@@ -35,6 +39,11 @@ services:
             - 5432:5432
         environment:
             - POSTGRES_PASSWORD=test
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 3s
+            timeout: 5s
+            retries: 10
     driver:
         build:
             context: ../uscope_driver
