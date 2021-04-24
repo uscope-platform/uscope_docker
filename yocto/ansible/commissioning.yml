@@ -30,27 +30,11 @@
         group: root
         mode: preserve
 
-    - name: Clean old modules
-      file:
-        state: absent
-        path: /lib/modules/5.4.0-xilinx-v2020.1/kernel/
-    
-    - name: Recreate modules directory
-      file:
-        path: /lib/modules/5.4.0-xilinx-v2020.1/kernel/
-        state: directory
-
-    - name: copy over new modules
-      unarchive:
-        src: /home/fils/git/uscope_docker/yocto/ansible/modules.zip
-        dest: /lib/modules/5.4.0-xilinx-v2020.1/
-
     - name: Creates uscope directory
       file:
         path: /home/root/uscope
         state: directory
   
-
 ########################################################
 #             ENABLE SERVICES                          #
 ########################################################
