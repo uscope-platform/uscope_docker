@@ -1,8 +1,0 @@
-[Unit]
-Description=Set up PL clocks
-
-[Service]
-ExecStart=/home/root/uscope/uscope_docker/yocto/init_pl_clocks.sh
-
-[Install]
-WantedBy=multi-user.target
