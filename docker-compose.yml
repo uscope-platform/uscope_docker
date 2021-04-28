@@ -1,9 +1,7 @@
 version: '2'
 services:
     client:
-        build: 
-            context: ../uscope_react
-            dockerfile: ./Dockerfile
+        build: ./client
         image: client:latest
         stdin_open: true
         tty: true
@@ -15,8 +13,6 @@ services:
             - 80:80
             - 443:443
             - 3004:3004
-        volumes: 
-            - /home/fils/git/uscope_react:/uscope_client
     server:
         build: ./server
         stdin_open: true
@@ -27,20 +23,10 @@ services:
             - external_network
         ports:
             - 8989:8989
-        depends_on:
-            database:
-                condition: service_healthy
-        volumes: 
-            - /home/fils/git/uscope_server:/server
     database:
         build: ./database
         networks:
             - internal_network
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres"]
-            interval: 3s
-            timeout: 5s
-            retries: 10
         ports: 
             - 5432:5432
         environment:
