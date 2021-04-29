@@ -1,9 +1,6 @@
 version: '2'
 services:
     client:
-        build: 
-            context: ../uscope_react
-            dockerfile: ./Dockerfile
         image: client:latest
         networks: 
             - external_network
@@ -13,10 +10,7 @@ services:
             - 80:80
             - 443:443
             - 3004:3004
-        volumes: 
-            - /home/root/uscope/uscope_react:/uscope_client
     server:
-        build: ./server
         stdin_open: true
         tty: true
         image: server:latest
@@ -28,10 +22,7 @@ services:
         depends_on:
             database:
                 condition: service_healthy
-        volumes: 
-            - /home/root/uscope/uscope_server:/server
     database:
-        build: ./database
         image: database:latest
         networks:
             - internal_network
@@ -45,9 +36,6 @@ services:
             timeout: 5s
             retries: 10
     driver:
-        build:
-            context: ../uscope_driver
-            dockerfile: ./Dockerfile
         image: driver:latest
         ports:
             - 6666:6666
