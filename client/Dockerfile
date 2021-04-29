@@ -22,5 +22,8 @@ FROM nginx
 WORKDIR /client
 
 COPY --from=builder /driver/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+RUN mkdir /etc/nginx/certs
 
-CMD ["yarn", "run", "start" ]
+COPY certs/uscope_0.crt /etc/nginx/certs/uscope_0.crt
+COPY certs/uscope_0.pem /etc/nginx/certs/uscope_0.pem
