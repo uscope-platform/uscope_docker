@@ -16,7 +16,7 @@ RUN cmake ./
 RUN cmake --build . --parallel 6
 
 
-FROM ubuntu:focal as RUNNER
+FROM ubuntu:hirsute as RUNNER
 WORKDIR /driver
 COPY --from=builder /driver/uscope_driver .
 CMD ["/driver/uscope_driver"]
