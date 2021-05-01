@@ -25,9 +25,9 @@ ENV TZ=Europe/Rome
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libantlr4-runtime4.9 libffi-dev python3-sqlalchemy python3-passlib python3-flask-cors python3-flask python3-flask-restful 
+RUN apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libantlr4-runtime4.9 libffi-dev python3-passlib python3-flask-cors python3-flask python3-flask-restful 
 
-RUN pip3 install flask_jwt_extended sqlitedict gunicorn
+RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy
 
 COPY --from=extension_builder /server/dist/fCore*.whl .
 RUN pip3 install /server/fCore*.whl
