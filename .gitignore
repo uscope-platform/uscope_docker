@@ -12,3 +12,5 @@ server/libfchas.so
 
 .vscode/settings.json
 client/certs/
+
+*.tar
