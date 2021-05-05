@@ -23,6 +23,10 @@ services:
             - external_network
         ports:
             - 8989:8989
+    redis:
+        image: redis:latest
+        networks:
+            - internal_network
     database:
         build: ./database
         networks:
