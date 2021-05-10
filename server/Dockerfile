@@ -2,6 +2,8 @@ FROM ubuntu:hirsute AS extension_builder
 
 WORKDIR /server
 
+ARG REPOSITORY=git@github.com:uscope-platform
+
 ENV TZ=Europe/Rome
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -11,8 +13,8 @@ RUN apt-get -y install gcc cmake git python3 python3-pip libantlr4-runtime4.9 li
 # Download public key for github.com
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-RUN --mount=type=ssh git clone git@github.com:filssavi/fCore_has.git .
-RUN --mount=type=ssh git clone git@github.com:filssavi/uscope_server.git uscope_server
+RUN --mount=type=ssh git clone $REPOSITORY/fCore_has.git .
+RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
 RUN python3 setup.py bdist_wheel
 
