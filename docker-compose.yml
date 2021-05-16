@@ -1,7 +1,6 @@
 version: '2'
 services:
     client:
-        build: ./client
         image: client:latest
         stdin_open: true
         tty: true
@@ -14,7 +13,6 @@ services:
             - 443:443
             - 3004:3004
     server:
-        build: ./server
         stdin_open: true
         tty: true
         image: server:latest
@@ -28,7 +26,7 @@ services:
         networks:
             - internal_network
     database:
-        build: ./database
+        image: database:latest
         networks:
             - internal_network
         ports: 
@@ -36,10 +34,8 @@ services:
         environment:
             - POSTGRES_PASSWORD=test
     driver:
-        build:
-            context: ../uscope_driver
-            dockerfile: ./Dockerfile
         image: driver:latest
+        command: ["/driver/uscope_driver", "--debug", "--log"]
         ports:
             - 6666:6666
         networks:
