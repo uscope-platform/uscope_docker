@@ -41,6 +41,7 @@ services:
         networks:
             - internal_network
         privileged: true
+        command: ["/driver/uscope_driver", "--debug", "--log"]
 networks:
     internal_network:
         driver: bridge
