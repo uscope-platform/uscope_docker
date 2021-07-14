@@ -16,7 +16,10 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 RUN --mount=type=ssh git clone $REPOSITORY/fCore_has.git .
 RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
-RUN python3 setup.py bdist_wheel
+RUN mkdir build & cd build 
+RUN cmake --build . --parallel 4
+RUN cmake --install .
+
 
 
 FROM ubuntu:hirsute
@@ -31,10 +34,8 @@ RUN apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 l
 
 RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis
 
-COPY --from=extension_builder /server/dist/fCore*.whl .
-RUN pip3 install /server/fCore*.whl
-RUN rm -r fCore*.whl
-
+COPY --from=extension_builder /usr/bin/fCore_has /usr/bin/fCore_has
+COPY --from=extension_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
 
 COPY --from=extension_builder /server/uscope_server .
 
