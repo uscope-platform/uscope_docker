@@ -8,7 +8,7 @@ ENV TZ=Europe/Rome
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get -y install gcc cmake git python3 python3-pip libantlr4-runtime4.9 libantlr4-runtime-dev
+RUN apt-get -y install gcc cmake git python3 python3-pip libantlr4-runtime4.9 libantlr4-runtime-dev libgtest-dev
 
 # Download public key for github.com
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -16,10 +16,14 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 RUN --mount=type=ssh git clone $REPOSITORY/fCore_has.git .
 RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
-RUN mkdir build & cd build 
+RUN mkdir build
+
+WORKDIR /server/build
+RUN cmake ..
 RUN cmake --build . --parallel 4
 RUN cmake --install .
 
+WORKDIR /server
 
 
 FROM ubuntu:hirsute
