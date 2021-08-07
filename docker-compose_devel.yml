@@ -1,0 +1,27 @@
+version: '2'
+services:
+    redis:
+        image: redis:latest
+        networks:
+            - external_network
+    database:
+        image: database:latest
+        networks:
+            - external_network
+        ports: 
+            - 5432:5432
+        environment:
+            - POSTGRES_PASSWORD=test
+    driver:
+        image: driver:latest
+        ports:
+            - 6666:6666
+        networks:
+            - external_network
+        privileged: true
+        command: ["/driver/uscope_driver", "--debug", "--log"]
+networks:
+    external_network:
+        driver: bridge
+
+        

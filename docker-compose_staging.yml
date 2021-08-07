@@ -25,12 +25,10 @@ services:
         image: redis:latest
         networks:
             - internal_network
-            - external_network
     database:
         image: database:latest
         networks:
             - internal_network
-            - external_network
         ports: 
             - 5432:5432
         environment:
