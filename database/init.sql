@@ -64,7 +64,6 @@ create table programs
         constraint programs_pk
             primary key,
     name    text,
-    path    text,
     content text,
     type    text,
     hex     bigint[]
@@ -177,3 +176,16 @@ alter table app_settings owner to uscope;
 create unique index app_settings_name_uindex
 	on app_settings (name);
 
+-- CREATE BITSTREAM TABLE
+
+create table bitstream
+(
+    id   integer not null,
+    path path    not null
+);
+
+alter table bitstream
+    owner to uscope;
+
+create unique index bitstream_id_uindex
+    on bitstream (id);
