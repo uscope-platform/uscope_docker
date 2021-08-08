@@ -15,8 +15,11 @@ services:
         tty: true
         image: server:latest
         networks:
+            
             - internal_network
             - external_network
+        volumes: 
+            - /lib/firmware:/lib/firmware
         ports:
             - 8989:8989
         depends_on:
