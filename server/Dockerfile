@@ -36,7 +36,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 RUN apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libantlr4-runtime4.9 libffi-dev python3-passlib python3-flask-cors python3-flask python3-flask-restful
 
-RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis toml
+RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis
 
 
 COPY --from=toolchain_builder /usr/bin/fCore_has /usr/bin/fCore_has
@@ -44,7 +44,7 @@ COPY --from=toolchain_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
 
 COPY --from=toolchain_builder /server/uscope_server .
 
-RUN key_1=$(openssl rand -hex 32) && key_2=$(openssl rand -hex 32) && cat flask.cfg | sed -e "s/uScope-key/$key_1/" | sed -e "s/uScope-JWT-key/$key_2/" | tee flask.cfg
+RUN key_1=$(openssl rand -hex 32) && key_2=$(openssl rand -hex 32) && cat server_config.py | sed -e "s/uScope-key/$key_1/" | sed -e "s/uScope-JWT-key/$key_2/" | tee server_config.py
 
 ENV USCOPE_DEPLOYMENT_OPTION DOCKER
 CMD ["gunicorn", "-c", "gunicorn.py", "wsgi:app"]
