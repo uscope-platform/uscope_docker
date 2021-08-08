@@ -181,7 +181,7 @@ create unique index app_settings_name_uindex
 create table bitstreams
 (
     id   integer not null,
-    path path    not null
+    path text    not null
 );
 
 alter table bitstreams
