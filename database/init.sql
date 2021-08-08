@@ -178,14 +178,14 @@ create unique index app_settings_name_uindex
 
 -- CREATE BITSTREAM TABLE
 
-create table bitstream
+create table bitstreams
 (
     id   integer not null,
     path path    not null
 );
 
-alter table bitstream
+alter table bitstreams
     owner to uscope;
 
-create unique index bitstream_id_uindex
-    on bitstream (id);
+create unique index bitstreams_id_uindex
+    on bitstreams (id);
