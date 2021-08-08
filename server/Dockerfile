@@ -1,4 +1,4 @@
-FROM ubuntu:hirsute AS extension_builder
+FROM ubuntu:hirsute AS toolchain_builder
 
 WORKDIR /server
 
@@ -38,10 +38,14 @@ RUN apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 l
 
 RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis
 
-COPY --from=extension_builder /usr/bin/fCore_has /usr/bin/fCore_has
-COPY --from=extension_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
 
-COPY --from=extension_builder /server/uscope_server .
+COPY --from=toolchain_builder /usr/bin/fCore_has /usr/bin/fCore_has
+COPY --from=toolchain_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
+
+COPY --from=toolchain_builder /server/uscope_server .
+
+RUN key=$(openssl rand -base64 32) && sed -i "s/uScope-key/$key/" flask.cfg
+RUN key=$(openssl rand -base64 32) && sed -i "s/uScope-JWT-key/$key/" flask.cfg
 
 ENV USCOPE_DEPLOYMENT_OPTION DOCKER
 CMD ["gunicorn", "-c", "gunicorn.py", "wsgi:app"]
