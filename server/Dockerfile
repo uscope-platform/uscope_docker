@@ -44,8 +44,7 @@ COPY --from=toolchain_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
 
 COPY --from=toolchain_builder /server/uscope_server .
 
-RUN key=$(openssl rand -base64 32) && sed -i "s/uScope-key/$key/" flask.cfg
-RUN key=$(openssl rand -base64 32) && sed -i "s/uScope-JWT-key/$key/" flask.cfg
+RUN key_1=$(openssl rand -hex 32) && key_2=$(openssl rand -hex 32) && cat flask.cfg | sed -e "s/uScope-key/$key_1/" | sed -e "s/uScope-JWT-key/$key_2/" | tee flask.cfg
 
 ENV USCOPE_DEPLOYMENT_OPTION DOCKER
 CMD ["gunicorn", "-c", "gunicorn.py", "wsgi:app"]
