@@ -1,3 +1,25 @@
+FROM ubuntu:hirsute as doc_builder
+
+WORKDIR /
+
+ARG REPOSITORY=git@github.com:uscope-platform
+
+ENV TZ=Europe/Rome
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update
+RUN apt-get -y install gcc make git python3 python3-pip python3-sphinx python3-sphinxcontrib.httpdomain
+RUN pip install sphinx_rtd_theme
+
+# Download public key for github.com
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+RUN --mount=type=ssh git clone $REPOSITORY/uscope_doc.git uscope_doc
+
+WORKDIR /uscope_doc
+
+RUN make html
+
 FROM nginx
 
 WORKDIR /client
@@ -9,7 +31,7 @@ COPY build /usr/share/nginx/html
 COPY ${NGINX_CONFIG} /etc/nginx/nginx.conf
 RUN mkdir /etc/nginx/certs
 
-
-
 COPY certs/uscope_0.crt /etc/nginx/certs/uscope_0.crt
 COPY certs/uscope_0.pem /etc/nginx/certs/uscope_0.pem
+
+COPY --from=toolchain_builder /uscope_doc/_build/html /usr/share/nginx/html/uscope_doc
