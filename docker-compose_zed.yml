@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
     client:
         image: client:latest
@@ -22,9 +22,6 @@ services:
             - /lib/firmware:/lib/firmware
         ports:
             - 8989:8989
-        depends_on:
-            database:
-                condition: service_healthy
     redis:
         image: redis:latest
         networks:
@@ -37,11 +34,6 @@ services:
             - 5432:5432
         environment:
             - POSTGRES_PASSWORD=test
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres"]
-            interval: 3s
-            timeout: 5s
-            retries: 10
     driver:
         image: driver:latest
         ports:
