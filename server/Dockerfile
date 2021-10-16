@@ -20,7 +20,7 @@ WORKDIR /server
 ARG REPOSITORY=git@github.com:uscope-platform
 
 ENV TZ=Europe/Rome
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get -y install gcc cmake git python3 python3-pip libantlr4-runtime4.9 libantlr4-runtime-dev libgtest-dev

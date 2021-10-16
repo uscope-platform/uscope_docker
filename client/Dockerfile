@@ -20,7 +20,7 @@ WORKDIR /
 ARG REPOSITORY=git@github.com:uscope-platform
 
 ENV TZ=Europe/Rome
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get -y install gcc make git python3 python3-pip python3-sphinx python3-sphinxcontrib.httpdomain

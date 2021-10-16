@@ -19,7 +19,7 @@ ARG REPOSITORY=git@github.com:uscope-platform
 
 WORKDIR /driver
 ENV TZ=Europe/Rome
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get -y install gcc git python3-pip curl ca-certificates cmake
