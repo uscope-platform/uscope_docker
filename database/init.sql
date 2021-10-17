@@ -205,3 +205,41 @@ alter table bitstreams
 
 create unique index bitstreams_id_uindex
     on bitstreams (id);
+
+-- CREATE TABLE VERSION UPDATE STORED PROCEDURES
+
+create procedure update_application_version()
+language sql
+as $$
+insert into data_versions("table", version, last_modified) values ('Applications', gen_random_uuid(),CURRENT_TIMESTAMP)
+on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
+$$;
+
+create procedure update_scripts_version()
+language sql
+as $$
+insert into data_versions("table", version, last_modified) values ('scripts', gen_random_uuid(),CURRENT_TIMESTAMP)
+on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
+$$;
+
+
+create procedure update_programs_version()
+language sql
+as $$
+insert into data_versions("table", version, last_modified) values ('programs', gen_random_uuid(),CURRENT_TIMESTAMP)
+on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
+$$;
+
+create procedure update_peripherals_version()
+language sql
+as $$
+insert into data_versions("table", version, last_modified) values ('Peripherals', gen_random_uuid(),CURRENT_TIMESTAMP)
+on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
+$$;
+
+create procedure update_bitstreams_version()
+language sql
+as $$
+insert into data_versions("table", version, last_modified) values ('bitstreams', gen_random_uuid(),CURRENT_TIMESTAMP)
+on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
+$$;
