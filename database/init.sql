@@ -237,3 +237,11 @@ execute procedure update_version('programs');
 create trigger bump_scripts_version
 after insert or delete or update on scripts
 execute procedure update_version('scripts');
+
+-- initialize data versions table
+
+insert into data_versions("table", version, last_modified) values ('Applications', gen_random_uuid(),CURRENT_TIMESTAMP);
+insert into data_versions("table", version, last_modified) values ('bitstreams', gen_random_uuid(),CURRENT_TIMESTAMP);
+insert into data_versions("table", version, last_modified) values ('Peripherals', gen_random_uuid(),CURRENT_TIMESTAMP);
+insert into data_versions("table", version, last_modified) values ('programs', gen_random_uuid(),CURRENT_TIMESTAMP);
+insert into data_versions("table", version, last_modified) values ('scripts', gen_random_uuid(),CURRENT_TIMESTAMP);
