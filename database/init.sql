@@ -206,40 +206,34 @@ alter table bitstreams
 create unique index bitstreams_id_uindex
     on bitstreams (id);
 
--- CREATE TABLE VERSION UPDATE STORED PROCEDURES
+-- CREATE STORED FUNCTION TO UPDATE THE TABLE VERSION
 
-create procedure update_application_version()
-language sql
-as $$
-insert into data_versions("table", version, last_modified) values ('Applications', gen_random_uuid(),CURRENT_TIMESTAMP)
+create function update_version() returns trigger as $$ begin
+insert into data_versions("table", version, last_modified) values (TG_ARGV[0], gen_random_uuid(),CURRENT_TIMESTAMP)
 on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
-$$;
-
-create procedure update_scripts_version()
-language sql
-as $$
-insert into data_versions("table", version, last_modified) values ('scripts', gen_random_uuid(),CURRENT_TIMESTAMP)
-on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
-$$;
+return new;
+end;
+$$ language plpgsql;
 
 
-create procedure update_programs_version()
-language sql
-as $$
-insert into data_versions("table", version, last_modified) values ('programs', gen_random_uuid(),CURRENT_TIMESTAMP)
-on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
-$$;
+-- CREATE TRIGGERS TO BUMP TABLE VERSIONS
 
-create procedure update_peripherals_version()
-language sql
-as $$
-insert into data_versions("table", version, last_modified) values ('Peripherals', gen_random_uuid(),CURRENT_TIMESTAMP)
-on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
-$$;
+create trigger bump_application_version
+after insert or delete or update on applications
+execute procedure update_version('Applications');
 
-create procedure update_bitstreams_version()
-language sql
-as $$
-insert into data_versions("table", version, last_modified) values ('bitstreams', gen_random_uuid(),CURRENT_TIMESTAMP)
-on conflict("table") do update set version=excluded.version, last_modified=excluded.last_modified;
-$$;
+create trigger bump_bitstreams_version
+after insert or delete or update on bitstreams
+execute procedure update_version('bitstreams');
+
+create trigger bump_peripherals_version
+after insert or delete or update on peripherals
+execute procedure update_version('Peripherals');
+
+create trigger bump_programs_version
+after insert or delete or update on programs
+execute procedure update_version('programs');
+
+create trigger bump_scripts_version
+after insert or delete or update on scripts
+execute procedure update_version('scripts');
