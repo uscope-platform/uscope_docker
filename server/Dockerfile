@@ -57,7 +57,7 @@ RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis
 COPY --from=toolchain_builder /usr/bin/fCore_has /usr/bin/fCore_has
 COPY --from=toolchain_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
 
-COPY --from=toolchain_builder /server/uscope_server .
+COPY uscope_server .
 
 RUN key_1=$(openssl rand -hex 32) && key_2=$(openssl rand -hex 32) && cat server_config.py | sed -e "s/uScope-key/$key_1/" | sed -e "s/uScope-JWT-key/$key_2/" | tee server_config.py
 
