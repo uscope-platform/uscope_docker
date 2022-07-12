@@ -30,7 +30,9 @@ services:
         environment:
             - POSTGRES_PASSWORD=test
     driver:
-        image: driver:latest
+        image: driver_devel:latest
+        build:
+            context: ./driver_devel
         ports:
             - 6666:6666
         networks:

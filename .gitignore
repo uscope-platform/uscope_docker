@@ -1,16 +1,14 @@
 *~
+__pycache__/
+\.env
+.vscode/settings.json
+*.tar
+
 
 server/fCore_has
-
-__pycache__/
-
-\.env
-
 server/fcore_has/
-
 server/libfchas.so
 
-.vscode/settings.json
 client/certs/
 
-*.tar
+driver_devel/uscope_driver
