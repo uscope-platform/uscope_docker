@@ -36,6 +36,9 @@ services:
         volumes: 
             - /lib/firmware:/lib/firmware
             - /usr/bin/bootgen:/usr/bin/bootgen
+        environment:
+            - DB_HOST = postgresql+psycopg2://uscope:test@database/uscope
+            - REDIS_HOST = redis
         ports:
             - 8989:8989
     redis:
