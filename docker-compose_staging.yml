@@ -37,8 +37,9 @@ services:
         ports:
             - 8989:8989
         environment:
-            - DB_HOST = postgresql+psycopg2://uscope:test@database/uscope
-            - REDIS_HOST = redis
+            - DB_HOST=postgresql+psycopg2://uscope:test@database/uscope
+            - REDIS_HOST=redis
+            - DRIVER_HOST=driver
     redis:
         image: redis:latest
         networks:

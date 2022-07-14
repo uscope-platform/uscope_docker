@@ -37,8 +37,9 @@ services:
             - /lib/firmware:/lib/firmware
             - /usr/bin/bootgen:/usr/bin/bootgen
         environment:
-            - DB_HOST = postgresql+psycopg2://uscope:test@database/uscope
-            - REDIS_HOST = redis
+            - DB_HOST=postgresql+psycopg2://uscope:test@database/uscope
+            - REDIS_HOST=redis
+            - DRIVER_HOST=driver
         ports:
             - 8989:8989
     redis:
