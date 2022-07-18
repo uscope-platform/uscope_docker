@@ -23,7 +23,7 @@ ENV TZ=Europe/Rome
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
-RUN apt-get -y install gcc cmake git python3 python3-pip libantlr4-runtime4.9 libantlr4-runtime-dev libgtest-dev
+RUN apt-get -y install gcc cmake git python3 python3-pip pkg-config default-jre libgtest-dev uuid-dev
 
 # Download public key for github.com
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -35,7 +35,10 @@ RUN mkdir build
 
 WORKDIR /server/build
 RUN cmake ..
-RUN cmake --build . --parallel 4
+RUN cmake --build . --parallel 4 --target parsers
+RUN cmake --build . --parallel 4 --target fCore_cc
+RUN cmake --build . --parallel 4 --target fCore_has
+RUN cmake --build . --parallel 4 --target fCore_dis
 RUN cmake --install .
 
 WORKDIR /server
@@ -49,7 +52,7 @@ ENV TZ=Europe/Rome
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update
-RUN apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libantlr4-runtime4.9 libffi-dev python3-passlib python3-flask-cors python3-flask
+RUN apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libffi-dev python3-passlib python3-flask-cors python3-flask
 
 RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis flask-restful
 
