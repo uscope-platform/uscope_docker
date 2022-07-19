@@ -148,7 +148,8 @@ create table applications
 	macro jsonb,
 	parameters jsonb,
 	peripherals jsonb,
-    miscellaneous jsonb
+    miscellaneous jsonb,
+    soft_cores jsonb
 );
 
 alter table applications owner to uscope;

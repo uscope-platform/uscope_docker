@@ -18,6 +18,7 @@ FROM ubuntu:hirsute AS toolchain_builder
 WORKDIR /server
 
 ARG REPOSITORY=git@github.com:uscope-platform
+ARG N_CORES=8
 
 ENV TZ=Europe/Rome
 ARG DEBIAN_FRONTEND=noninteractive
@@ -26,23 +27,27 @@ RUN apt-get update
 RUN apt-get -y install gcc cmake git python3 python3-pip pkg-config default-jre libgtest-dev uuid-dev
 
 # Download public key for github.com
-RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git .
-RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
+ARG GIT_USER=uscope-platform
+
+ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
+RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git
+
+WORKDIR /server/fCore_toolchain
 
 RUN mkdir build
 
-WORKDIR /server/build
+WORKDIR /server/fCore_toolchain/build
 RUN cmake ..
-RUN cmake --build . --parallel 4 --target parsers
-RUN cmake --build . --parallel 4 --target fCore_cc
-RUN cmake --build . --parallel 4 --target fCore_has
-RUN cmake --build . --parallel 4 --target fCore_dis
+RUN cmake --build . --parallel $N_CORES --target parsers
+RUN cmake --build . --parallel $N_CORES --target toolchain
 RUN cmake --install .
 
 WORKDIR /server
 
+ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
+RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
 FROM ubuntu:hirsute
 
