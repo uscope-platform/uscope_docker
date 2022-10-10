@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:hirsute as doc_builder
+FROM ubuntu:jammy as doc_builder
 
 WORKDIR /
 
