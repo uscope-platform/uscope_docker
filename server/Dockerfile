@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:hirsute AS toolchain_builder
+FROM ubuntu:jammy AS toolchain_builder
 
 WORKDIR /server
 
@@ -49,7 +49,7 @@ WORKDIR /server
 ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
 RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
-FROM ubuntu:hirsute
+FROM ubuntu:jammy
 
 WORKDIR /server
 

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:hirsute AS builder
+FROM ubuntu:jammy AS builder
 
 ARG REPOSITORY=git@github.com:uscope-platform
 
@@ -33,7 +33,7 @@ RUN cmake ./
 RUN cmake --build . --parallel 6
 
 
-FROM ubuntu:hirsute as RUNNER
+FROM ubuntu:jammy as RUNNER
 WORKDIR /driver
 COPY --from=builder /driver/uscope_driver .
 CMD ["/driver/uscope_driver"]
