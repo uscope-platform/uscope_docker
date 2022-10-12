@@ -38,8 +38,10 @@ WORKDIR /server/fCore_toolchain
 
 RUN mkdir build
 
+ARG TOOLCHAIN_BUILD=Release
+
 WORKDIR /server/fCore_toolchain/build
-RUN cmake ..
+RUN cmake -DCMAKE_BUILD_TYPE=$TOOLCHAIN_BUILD ..
 RUN cmake --build . --parallel $N_CORES --target parsers
 RUN cmake --build . --parallel $N_CORES --target toolchain
 RUN cmake --install .
@@ -64,7 +66,7 @@ ENV TZ=Europe/Rome
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update \
-    && apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libffi-dev python3-passlib python3-flask-cors python3-flask \
+    && apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libffi-dev python3-passlib python3-flask-cors python3-flask gdbserver\
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis flask-restful
