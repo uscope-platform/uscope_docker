@@ -29,6 +29,9 @@ RUN apt-get -y install gcc cmake git python3 python3-pip pkg-config default-jre 
 # Download public key for github.com
 RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
+ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
+RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
+
 RUN --mount=type=ssh git clone https://github.com/Xilinx/bootgen.git
 
 WORKDIR /server/bootgen
@@ -38,10 +41,9 @@ RUN make -j$N_CORES
 WORKDIR /server
 
 ARG GIT_USER=uscope-platform
-ARG GIT_BRANCH=main
 
 ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
-RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git -b $GIT_BRANCH
+RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git
 
 WORKDIR /server/fCore_toolchain
 
@@ -54,9 +56,6 @@ RUN cmake -DCMAKE_BUILD_TYPE=$TOOLCHAIN_BUILD ..
 RUN cmake --build . --parallel $N_CORES --target parsers
 RUN cmake --build . --parallel $N_CORES --target toolchain
 RUN cmake --install .
-
-ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
-RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
 FROM ubuntu:jammy
 
