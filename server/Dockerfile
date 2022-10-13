@@ -30,9 +30,10 @@ RUN apt-get -y install gcc cmake git python3 python3-pip pkg-config default-jre 
 RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 ARG GIT_USER=uscope-platform
+ARG GIT_BRANCH=main
 
 ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
-RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git
+RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git -b $GIT_BRANCH
 
 WORKDIR /server/fCore_toolchain
 
