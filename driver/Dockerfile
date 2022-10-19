@@ -19,7 +19,7 @@ ARG REPOSITORY=git@github.com:uscope-platform
 
 WORKDIR /driver
 
-RUN apk add alpine-sdk cmake openssh argp-standalone
+RUN apk add alpine-sdk --no-cache cmake openssh argp-standalone
 
 # Download public key for github.com
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -31,5 +31,6 @@ RUN cmake --build . --parallel 6
 
 FROM alpine:latest as RUNNER
 WORKDIR /driver
+RUN apk add --no-cache libstdc++ libgcc
 COPY --from=builder /driver/uscope_driver .
 CMD ["/driver/uscope_driver"]
