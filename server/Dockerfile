@@ -13,18 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:jammy AS toolchain_builder
+FROM alpine:latest AS toolchain_builder
 
 WORKDIR /server
 
 ARG REPOSITORY=git@github.com:uscope-platform
 ARG N_CORES=8
 
-ENV TZ=Europe/Rome
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update
-RUN apt-get -y install gcc cmake git python3 python3-pip pkg-config default-jre libgtest-dev uuid-dev libssl-dev
+RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev gtest-dev openssl-dev openssh
 
 # Download public key for github.com
 RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -33,12 +29,6 @@ ARG GIT_USER=uscope-platform
 
 ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
 RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
-
-RUN --mount=type=ssh git clone https://github.com/Xilinx/bootgen.git
-
-WORKDIR /server/bootgen
-
-RUN make -j$N_CORES
 
 WORKDIR /server
 
@@ -54,7 +44,6 @@ ARG TOOLCHAIN_BUILD=Release
 
 WORKDIR /server/fCore_toolchain/build
 RUN cmake -DCMAKE_BUILD_TYPE=$TOOLCHAIN_BUILD ..
-RUN cmake --build . --parallel $N_CORES --target parsers
 RUN cmake --build . --parallel $N_CORES --target toolchain
 RUN cmake --install .
 
@@ -62,12 +51,21 @@ FROM alpine:latest
 
 WORKDIR /server
  
-RUN apk add python3 py3-pip py3-psycopg2 libffi py3-passlib py3-flask-cors py3-msgpack py3-flask openssl py3-argon2-cffi py3-gunicorn py3-redis py3-sqlalchemy
+RUN apk add build-base git pkgconfig python3 py3-pip py3-psycopg2 libffi py3-passlib py3-flask-cors py3-msgpack py3-flask openssl py3-argon2-cffi py3-gunicorn py3-redis py3-sqlalchemy openssl-dev
 RUN pip3 install flask_jwt_extended sqlitedict flask-restful
 
 COPY --from=toolchain_builder /usr/bin/fCore_has /usr/bin/fCore_has
 COPY --from=toolchain_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
-COPY --from=toolchain_builder /server/bootgen/bootgen /usr/bin/bootgen
+
+ARG N_CORES=8
+
+RUN --mount=type=ssh git clone https://github.com/Xilinx/bootgen.git
+
+WORKDIR /server/bootgen
+
+RUN make -j$N_CORES
+RUN cp /server/bootgen/bootgen /usr/bin/bootgen
+
 
 COPY uscope_server .
 
