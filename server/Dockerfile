@@ -64,8 +64,9 @@ RUN --mount=type=ssh git clone https://github.com/Xilinx/bootgen.git
 WORKDIR /server/bootgen
 
 RUN make -j$N_CORES
-RUN cp /server/bootgen/bootgen /usr/bin/bootgen
+RUN ln /server/bootgen/bootgen /bin/bootgen
 
+WORKDIR /server
 
 COPY uscope_server .
 
