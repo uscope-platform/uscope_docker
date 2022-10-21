@@ -29,16 +29,16 @@ services:
             - 5432:5432
         environment:
             - POSTGRES_PASSWORD=test
-    driver:
-        image: driver_devel:latest
-        build:
-            context: ./driver_devel
-        ports:
-            - 6666:6666
-        networks:
-            - external_network
-        privileged: true
-        command: ["/driver/uscope_driver", "--debug", "--log"]
+    # driver:
+    #     image: driver:latest
+    #     build:
+    #         context: ./driver
+    #     ports:
+    #         - 6666:6666
+    #     networks:
+    #         - external_network
+    #     privileged: true
+    #     command: ["/driver/uscope_driver", "--debug", "--log"]
 networks:
     external_network:
         driver: bridge
