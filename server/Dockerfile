@@ -58,18 +58,12 @@ RUN cmake --build . --parallel $N_CORES --target parsers
 RUN cmake --build . --parallel $N_CORES --target toolchain
 RUN cmake --install .
 
-FROM ubuntu:jammy
+FROM alpine:latest
 
 WORKDIR /server
 
-ENV TZ=Europe/Rome
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-RUN apt-get update \
-    && apt-get -y install git python3 python3-pip python3-argon2 python3-psycopg2 libffi-dev python3-passlib python3-flask-cors python3-msgpack python3-flask gdbserver\
-    && rm -rf /var/lib/apt/lists/*
-
-RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis flask-restful
+RUN apk add python3 py3-pip py3-psycopg2 libffi py3-passlib py3-flask-cors py3-msgpack py3-flask openssl
+RUN pip3 install flask_jwt_extended sqlitedict gunicorn sqlalchemy redis flask-restful argon2-cffi
 
 
 COPY --from=toolchain_builder /usr/bin/fCore_has /usr/bin/fCore_has
