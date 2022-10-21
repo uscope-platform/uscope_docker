@@ -25,7 +25,7 @@ RUN apk add alpine-sdk --no-cache cmake openssh argp-standalone
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 RUN --mount=type=ssh git clone $REPOSITORY/uscope_driver.git .
 
-RUN cmake ./
+RUN cmake -DCMAKE_BUILD_TYPE=Release ./
 RUN cmake --build . --parallel 6
 
 
