@@ -82,7 +82,8 @@ create table programs
     name    text,
     content text,
     type    text,
-    hex     bigint[]
+    hex     bigint[],
+    build_settings jsonb
 );
 
 alter table programs

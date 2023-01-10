@@ -23,8 +23,8 @@ ENV TZ=Europe/Rome
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
-RUN apt-get -y install gcc make git python3 python3-pip python3-sphinx python3-sphinxcontrib.httpdomain
-RUN pip install sphinx_rtd_theme
+RUN apt-get -y install gcc make git python3 python3-pip python3-sphinx
+RUN pip install sphinx_rtd_theme sphinxcontrib-httpdomain
 
 # Download public key for github.com
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
