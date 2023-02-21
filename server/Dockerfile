@@ -20,7 +20,7 @@ WORKDIR /server
 ARG REPOSITORY=git@github.com:uscope-platform
 ARG N_CORES=8
 
-RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev gtest-dev openssl-dev openssh nlohmann-json
+RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev gtest-dev openssl-dev openssh nlohmann-json gmock
 
 # Download public key for github.com
 RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
