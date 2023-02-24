@@ -12,3 +12,7 @@ server/libfchas.so
 client/certs/
 
 driver_devel/uscope_driver
+
+server/uscope_server/
+
+.idea/
