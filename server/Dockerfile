@@ -41,7 +41,7 @@ WORKDIR /server/fCore_toolchain/
 RUN conan profile detect --force
 RUN conan install . --output-folder=build --build=missing
 
-WORKDIR /server/fCore_toolchain/
+WORKDIR /server/fCore_toolchain/build
 
 RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
 RUN cmake --build . --parallel $N_CORES --target toolchain
