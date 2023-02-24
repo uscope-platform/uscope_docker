@@ -20,7 +20,8 @@ WORKDIR /server
 ARG REPOSITORY=git@github.com:uscope-platform
 ARG N_CORES=8
 
-RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev gtest-dev openssl-dev openssh nlohmann-json gmock
+RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev openssl-dev openssh 
+RUN pip install conan
 
 # Download public key for github.com
 RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -32,30 +33,17 @@ RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
 WORKDIR /server
 
-
 ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
 RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git
 
-RUN --mount=type=ssh git clone https://github.com/pboettch/json-schema-validator.git
+WORKDIR /server/fCore_toolchain/
 
-WORKDIR /server/json-schema-validator
-
-RUN mkdir build
-
-WORKDIR /server/json-schema-validator/build
-
-RUN cmake -DCMAKE_BUILD_TYPE=$TOOLCHAIN_BUILD ..
-RUN cmake --build . --parallel $N_CORES
-RUN cmake --install .
+RUN conan profile detect --force
+RUN conan install . --output-folder=build --build=missing
 
 WORKDIR /server/fCore_toolchain/
 
-RUN mkdir build
-
-ARG TOOLCHAIN_BUILD=Release
-
-WORKDIR /server/fCore_toolchain/build
-RUN cmake -DCMAKE_BUILD_TYPE=$TOOLCHAIN_BUILD ..
+RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
 RUN cmake --build . --parallel $N_CORES --target toolchain
 RUN cmake --install .
 

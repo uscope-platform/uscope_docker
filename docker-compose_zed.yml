@@ -40,6 +40,7 @@ services:
             - DB_HOST=postgresql+psycopg2://uscope:test@database/uscope
             - REDIS_HOST=redis
             - DRIVER_HOST=driver
+            - TEMPLATES_DIR=/server/fCore_compiler
         ports:
             - 8989:8989
     redis:
