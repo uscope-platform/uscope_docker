@@ -54,8 +54,9 @@ WORKDIR /server
 RUN apk add build-base git pkgconfig python3 py3-pip py3-psycopg2 libffi py3-passlib py3-flask-cors py3-msgpack py3-flask openssl py3-argon2-cffi py3-gunicorn py3-redis py3-sqlalchemy openssl-dev
 RUN pip3 install flask_jwt_extended sqlitedict flask-restful
 
-COPY --from=toolchain_builder /usr/bin/fCore_has /usr/bin/fCore_has
-COPY --from=toolchain_builder /usr/bin/fCore_cc /usr/bin/fCore_cc
+COPY --from=toolchain_builder /usr/local/bin/fCore_has /usr/bin/fCore_has
+COPY --from=toolchain_builder /usr/local/bin/fCore_cc /usr/bin/fCore_cc
+COPY --from=toolchain_builder /usr/local/etc/fcore_toolchain /usr/local/etc/fcore_toolchain
 
 ARG N_CORES=8
 
