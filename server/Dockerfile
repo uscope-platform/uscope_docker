@@ -17,7 +17,7 @@ FROM alpine:latest AS toolchain_builder
 
 WORKDIR /server
 
-ARG REPOSITORY=git@github.com:uscope-platform
+ARG REPOSITORY=https://github.com/uscope-platform
 ARG N_CORES=8
 
 RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev openssl-dev openssh 

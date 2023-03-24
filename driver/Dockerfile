@@ -15,7 +15,7 @@
 
 FROM alpine:latest AS builder
 
-ARG REPOSITORY=git@github.com:uscope-platform
+ARG REPOSITORY=https://github.com/uscope-platform
 
 WORKDIR /driver
 

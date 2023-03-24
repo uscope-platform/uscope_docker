@@ -17,7 +17,7 @@ FROM ubuntu:jammy as doc_builder
 
 WORKDIR /
 
-ARG REPOSITORY=git@github.com:uscope-platform
+ARG REPOSITORY=https://github.com/uscope-platform
 
 ENV TZ=Europe/Rome
 ARG DEBIAN_FRONTEND=noninteractive
