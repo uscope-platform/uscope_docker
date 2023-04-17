@@ -28,7 +28,7 @@ RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 ARG GIT_USER=uscope-platform
 
-ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
+ADD https://api.github.com/repos/$GIT_USER/uscope_server/git/refs/heads/main version.json
 RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
 
 WORKDIR /server
