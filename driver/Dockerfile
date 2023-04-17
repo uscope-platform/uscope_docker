@@ -22,9 +22,13 @@ WORKDIR /driver
 RUN apk add alpine-sdk --no-cache cmake openssh argp-standalone
 
 # Download public key for github.com
+ARG GIT_USER=uscope-platform
+
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 ADD https://api.github.com/repos/$GIT_USER/uscope_driver/git/refs/heads/main version.json
-RUN --mount=type=ssh git clone $REPOSITORY/uscope_driver.git .
+RUN --mount=type=ssh git clone $REPOSITORY/uscope_driver.git
+
+WORKDIR /driver/uscope_driver
 
 RUN cmake -DCMAKE_BUILD_TYPE=Release ./
 RUN cmake --build . --parallel 6
