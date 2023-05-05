@@ -13,32 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:jammy as doc_builder
-
-WORKDIR /
-
-ARG REPOSITORY=https://github.com/uscope-platform
-
-ENV TZ=Europe/Rome
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update
-RUN apt-get -y install gcc make git python3 python3-pip python3-sphinx
-RUN pip install sphinx_rtd_theme sphinxcontrib-httpdomain
-
-# Download public key for github.com
-RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-RUN --mount=type=ssh git clone $REPOSITORY/uscope_doc.git uscope_doc
-
-WORKDIR /uscope_doc
-
-RUN make html
-
 FROM nginx
 
 WORKDIR /client
-
 
 ARG NGINX_CONFIG=nginx_prod.conf
 
@@ -49,4 +26,4 @@ RUN mkdir /etc/nginx/certs
 COPY certs/uscope_0.crt /etc/nginx/certs/uscope_0.crt
 COPY certs/uscope_0.pem /etc/nginx/certs/uscope_0.pem
 
-COPY --from=doc_builder /uscope_doc/_build/html /usr/share/nginx/html/doc
+COPY  _build/html /usr/share/nginx/html/doc
