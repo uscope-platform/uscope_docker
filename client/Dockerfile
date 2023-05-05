@@ -26,4 +26,4 @@ RUN mkdir /etc/nginx/certs
 COPY certs/uscope_0.crt /etc/nginx/certs/uscope_0.crt
 COPY certs/uscope_0.pem /etc/nginx/certs/uscope_0.pem
 
-COPY  _build/html /usr/share/nginx/html/doc
+COPY  doc/html /usr/share/nginx/html/doc
