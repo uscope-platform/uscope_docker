@@ -166,6 +166,7 @@ create table peripherals
 		constraint peripherals_pk
 			primary key,
 	image text,
+    parametric boolean default false not null,
 	version text,
 	registers jsonb
 );
@@ -208,6 +209,23 @@ alter table bitstreams
 create unique index bitstreams_id_uindex
     on bitstreams (id);
 
+-- CREATE FILTERS TABLE
+
+create table filters
+(
+    id integer not null
+        constraint filters_pk
+            primary key,
+    name text,
+    parameters jsonb,
+    ideal_taps     double precision[],
+    quantized_taps integer[]
+);
+
+alter table filters
+    owner to uscope;
+
+
 -- CREATE STORED FUNCTION TO UPDATE THE TABLE VERSION
 
 create function update_version() returns trigger as $$ begin
@@ -240,6 +258,10 @@ create trigger bump_scripts_version
 after insert or delete or update on scripts
 execute procedure update_version('scripts');
 
+create trigger bump_filters_version
+after insert or delete or update on filters
+execute procedure update_version('filters');
+
 -- initialize data versions table
 
 insert into data_versions("table", version, last_modified) values ('Applications', gen_random_uuid(),CURRENT_TIMESTAMP);
@@ -247,3 +269,4 @@ insert into data_versions("table", version, last_modified) values ('bitstreams',
 insert into data_versions("table", version, last_modified) values ('Peripherals', gen_random_uuid(),CURRENT_TIMESTAMP);
 insert into data_versions("table", version, last_modified) values ('programs', gen_random_uuid(),CURRENT_TIMESTAMP);
 insert into data_versions("table", version, last_modified) values ('scripts', gen_random_uuid(),CURRENT_TIMESTAMP);
+insert into data_versions("table", version, last_modified) values ('filters', gen_random_uuid(),CURRENT_TIMESTAMP);
