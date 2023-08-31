@@ -36,6 +36,7 @@ services:
         volumes: 
             - /lib/firmware:/lib/firmware
             - /usr/bin/bootgen:/usr/bin/bootgen
+            - /home/root/db_backup:/db_backup
         environment:
             - DB_HOST=postgresql+psycopg2://uscope:test@database/uscope
             - REDIS_HOST=redis
