@@ -150,7 +150,11 @@ create table applications
 	parameters jsonb,
 	peripherals jsonb,
     miscellaneous jsonb,
-    soft_cores jsonb
+    soft_cores jsonb,
+    filters jsonb,
+    programs text[],
+    programs text[],
+
 );
 
 alter table applications owner to uscope;
