@@ -153,7 +153,7 @@ create table applications
     soft_cores jsonb,
     filters jsonb,
     programs text[],
-    programs text[],
+    scripts text[]
 
 );
 
