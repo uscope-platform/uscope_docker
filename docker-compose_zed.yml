@@ -63,6 +63,9 @@ services:
         networks:
             - internal_network
         privileged: true
+        environment:
+            - MMAP_N_PAGES_CTRL=144
+            - MMAP_N_PAGES_FCORE=144
         volumes: 
             - /lib/firmware:/lib/firmware
             - /sys/class/fpga_manager:/sys/class/fpga_manager
@@ -70,11 +73,10 @@ services:
             - /dev/uscope_BUS_1:/dev/uscope_BUS_1
             - /dev/uscope_data:/dev/uscope_data
             - /dev/mem:/dev/mem
+            
 networks:
     internal_network:
         driver: bridge
         internal: true
     external_network:
         driver: bridge
-
-        

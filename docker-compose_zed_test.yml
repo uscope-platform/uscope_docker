@@ -40,6 +40,8 @@ services:
             - DB_HOST=postgresql+psycopg2://uscope:test@database_testing/uscope
             - REDIS_HOST=redis_testing
             - DRIVER_HOST=driver_testing
+            - KEEP_FCORE_PRODUCTS=TRUE
+            - TEMPLATES_DIR=/server/fCore_compiler
         ports:
             - 8989:8989
     redis_testing:
@@ -62,6 +64,9 @@ services:
         networks:
             - internal_network
         privileged: true
+        environment:
+            - MMAP_N_PAGES_CTRL=144
+            - MMAP_N_PAGES_FCORE=144
         volumes: 
             - /lib/firmware:/lib/firmware
             - /sys/class/fpga_manager:/sys/class/fpga_manager
@@ -69,11 +74,10 @@ services:
             - /dev/uscope_BUS_1:/dev/uscope_BUS_1
             - /dev/uscope_data:/dev/uscope_data
             - /dev/mem:/dev/mem
+        command: ["/driver/uscope_driver", "--log"]
 networks:
     internal_network:
         driver: bridge
         internal: true
     external_network:
         driver: bridge
-
-        
