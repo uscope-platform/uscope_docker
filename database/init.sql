@@ -83,7 +83,8 @@ create table programs
     content text,
     type    text,
     hex     bigint[],
-    build_settings jsonb
+    build_settings jsonb,
+    cached_bin_version text
 );
 
 alter table programs
@@ -154,7 +155,6 @@ create table applications
     filters jsonb,
     programs text[],
     scripts text[]
-
 );
 
 alter table applications owner to uscope;
