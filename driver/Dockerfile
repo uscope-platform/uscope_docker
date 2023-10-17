@@ -34,7 +34,7 @@ WORKDIR /driver/uscope_driver
 
 RUN conan profile detect --force
 
-RUN cmake . -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=cmake-conan/conan_provider.cmake -DCMAKE_BUILD_TYPE=Release
+RUN cmake . -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=cmake-conan/conan_provider.cmake -DCMAKE_BUILD_TYPE=Release -DEXCLUDE_KERNEL_EMU=TRUE
 RUN cmake --build . --parallel $N_CORES
 RUN cmake --install .
 
