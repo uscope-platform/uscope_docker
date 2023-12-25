@@ -21,7 +21,7 @@ ARG REPOSITORY=https://github.com/uscope-platform
 ARG N_CORES=8
 
 RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev openssl-dev openssh 
-RUN pip install conan
+RUN pip install conan --break-system-packages
 
 # Download public key for github.com
 RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -52,7 +52,7 @@ FROM alpine:latest
 WORKDIR /server
  
 RUN apk add build-base git pkgconfig python3 py3-pip py3-scipy py3-psycopg2 libffi py3-passlib py3-flask-cors py3-msgpack py3-flask openssl py3-argon2-cffi py3-gunicorn py3-redis py3-sqlalchemy openssl-dev
-RUN pip3 install flask_jwt_extended sqlitedict flask-restful
+RUN pip3 install flask_jwt_extended sqlitedict flask-restful --break-system-packages
 
 COPY --from=toolchain_builder /usr/local/bin/fCore_has /usr/bin/fCore_has
 COPY --from=toolchain_builder /usr/local/bin/fCore_cc /usr/bin/fCore_cc

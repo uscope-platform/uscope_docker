@@ -20,7 +20,7 @@ ARG REPOSITORY=https://github.com/uscope-platform
 WORKDIR /driver
 
 RUN apk add alpine-sdk --no-cache cmake openssh argp-standalone python3 py3-pip bash
-RUN pip install conan
+RUN pip install conan --break-system-packages
 
 # Download public key for github.com
 ARG GIT_USER=uscope-platform
