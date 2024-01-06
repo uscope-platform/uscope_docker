@@ -229,6 +229,21 @@ create table filters
 alter table filters
     owner to uscope;
 
+-- CREATE EMULATORS TABLE
+
+create table emulators
+(
+    name        text,
+    cores       jsonb,
+    id          integer not null
+        constraint emulators_pk
+            primary key,
+    connections jsonb[],
+    n_cycles    integer
+);
+
+alter table emulators
+    owner to uscope;
 
 -- CREATE STORED FUNCTION TO UPDATE THE TABLE VERSION
 
@@ -266,6 +281,11 @@ create trigger bump_filters_version
 after insert or delete or update on filters
 execute procedure update_version('filters');
 
+create trigger bump_emulators_version
+after insert or delete or update on emulators
+execute procedure update_version('emulators');
+
+
 -- initialize data versions table
 
 insert into data_versions("table", version, last_modified) values ('Applications', gen_random_uuid(),CURRENT_TIMESTAMP);
@@ -274,3 +294,4 @@ insert into data_versions("table", version, last_modified) values ('Peripherals'
 insert into data_versions("table", version, last_modified) values ('programs', gen_random_uuid(),CURRENT_TIMESTAMP);
 insert into data_versions("table", version, last_modified) values ('scripts', gen_random_uuid(),CURRENT_TIMESTAMP);
 insert into data_versions("table", version, last_modified) values ('filters', gen_random_uuid(),CURRENT_TIMESTAMP);
+insert into data_versions("table", version, last_modified) values ('emulators', gen_random_uuid(),CURRENT_TIMESTAMP);
