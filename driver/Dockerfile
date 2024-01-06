@@ -20,7 +20,7 @@ ARG REPOSITORY=https://github.com/uscope-platform
 WORKDIR /driver
 
 RUN apk add alpine-sdk --no-cache cmake openssh argp-standalone python3 py3-pip bash
-RUN pip install conan
+RUN pip install conan --break-system-packages
 
 # Download public key for github.com
 ARG GIT_USER=uscope-platform
@@ -34,7 +34,7 @@ WORKDIR /driver/uscope_driver
 
 RUN conan profile detect --force
 
-RUN cmake . -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=cmake-conan/conan_provider.cmake -DCMAKE_BUILD_TYPE=Release
+RUN cmake . -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=cmake-conan/conan_provider.cmake -DCMAKE_BUILD_TYPE=Release -DEXCLUDE_KERNEL_EMU=TRUE
 RUN cmake --build . --parallel $N_CORES
 RUN cmake --install .
 
