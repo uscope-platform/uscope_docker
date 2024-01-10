@@ -139,9 +139,7 @@ create unique index data_versions_version_uindex
 
 create table applications
 (
-	application_name text not null
-		constraint applications_pk
-			primary key,
+	application_name text not null,
 	bitstream text,
 	clock_frequency bigint default 100000000,
 	channels jsonb,
@@ -154,7 +152,10 @@ create table applications
     soft_cores jsonb,
     filters jsonb,
     programs text[],
-    scripts text[]
+    scripts text[],
+    id                       serial
+        constraint applications_pk
+            primary key
 );
 
 alter table applications owner to uscope;
