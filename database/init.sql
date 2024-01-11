@@ -172,7 +172,6 @@ create table peripherals
     parametric boolean default false not null,
 	version text,
 	registers jsonb,
-    parametric boolean default false not null,
     id serial constraint peripherals_pk primary key
 );
 
