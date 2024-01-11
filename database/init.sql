@@ -167,13 +167,13 @@ create unique index applications_application_name_uindex
 
 create table peripherals
 (
-	name text not null
-		constraint peripherals_pk
-			primary key,
+	name text not null,
 	image text,
     parametric boolean default false not null,
 	version text,
-	registers jsonb
+	registers jsonb,
+    parametric boolean default false not null,
+    id serial constraint peripherals_pk primary key
 );
 
 alter table peripherals owner to uscope;
