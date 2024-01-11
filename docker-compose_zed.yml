@@ -42,6 +42,7 @@ services:
             - REDIS_HOST=redis
             - DRIVER_HOST=driver
             - TEMPLATES_DIR=/server/fCore_compiler
+            - ARCH=zynqmp
         ports:
             - 8989:8989
     redis:
@@ -64,8 +65,8 @@ services:
             - internal_network
         privileged: true
         environment:
-            - MMAP_N_PAGES_CTRL=144
-            - MMAP_N_PAGES_FCORE=144
+            - MMAP_N_PAGES_CTRL=344000
+            - MMAP_N_PAGES_FCORE=344000
             - ARCH=zynqmp
         volumes: 
             - /lib/firmware:/lib/firmware
