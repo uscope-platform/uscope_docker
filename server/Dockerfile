@@ -13,50 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM alpine:latest AS toolchain_builder
-
-WORKDIR /server
-
-ARG REPOSITORY=https://github.com/uscope-platform
-ARG N_CORES=8
-
-RUN apk add build-base cmake git python3 py3-pip pkgconfig util-linux-dev openssl-dev openssh 
-RUN pip install conan --break-system-packages
-
-# Download public key for github.com
-RUN mkdir -p -m 0602 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-ARG GIT_USER=uscope-platform
-
-ADD https://api.github.com/repos/$GIT_USER/uscope_server/git/refs/heads/main version.json
-RUN --mount=type=ssh git clone $REPOSITORY/uscope_server.git uscope_server
-
-WORKDIR /server
-
-ADD https://api.github.com/repos/$GIT_USER/fCore_toolchain/git/refs/heads/main version.json
-RUN --mount=type=ssh git clone $REPOSITORY/fCore_toolchain.git
-
-WORKDIR /server/fCore_toolchain/
-
-RUN conan profile detect --force
-RUN conan install . --output-folder=build --build=missing
-
-WORKDIR /server/fCore_toolchain/build
-
-RUN cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-RUN cmake --build . --parallel $N_CORES --target toolchain
-RUN cmake --install .
-
-FROM alpine:latest
+FROM ubuntu:mantic 
 
 WORKDIR /server
  
 RUN apk add build-base git pkgconfig python3 py3-pip py3-scipy py3-psycopg2 libffi py3-passlib py3-flask-cors py3-msgpack py3-flask openssl py3-argon2-cffi py3-gunicorn py3-redis py3-sqlalchemy openssl-dev
 RUN pip3 install flask_jwt_extended sqlitedict flask-restful --break-system-packages
 
-COPY --from=toolchain_builder /usr/local/bin/fCore_has /usr/bin/fCore_has
-COPY --from=toolchain_builder /usr/local/bin/fCore_cc /usr/bin/fCore_cc
-COPY --from=toolchain_builder /usr/local/etc/fcore_toolchain /usr/local/etc/fcore_toolchain
+COPY fCore_has /usr/bin/fCore_has
+COPY fCore_cc /usr/bin/fCore_cc
+COPY emulator_spec_schema.json /usr/local/etc/fcore_toolchain/emulator_spec_schema.json
+COPY compiler_spec_schema.json /usr/local/etc/fcore_toolchain/compiler_spec_schema.json
 
 ARG N_CORES=8
 
