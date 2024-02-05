@@ -20,12 +20,7 @@ WORKDIR /server
 RUN apt update && apt-get install -y build-essential git pkg-config python3 python3-sqlitedict python3-flask-restful gunicorn python3-pip python3-scipy python3-psycopg2 libffi8 python3-passlib python3-flask-cors python3-msgpack python3-flask openssl python3-argon2 python3-gunicorn python3-redis python3-sqlalchemy libssl-dev
 RUN pip3 install flask_jwt_extended --break-system-packages
 
-COPY fCore_has /usr/bin/fCore_has
-COPY fCore_cc /usr/bin/fCore_cc
-COPY emulator_spec_schema.json /usr/local/etc/fcore_toolchain/emulator_spec_schema.json
-COPY compiler_spec_schema.json /usr/local/etc/fcore_toolchain/compiler_spec_schema.json
-
-ARG N_CORES=8
+ARG N_CORES=12
 
 RUN --mount=type=ssh git clone https://github.com/Xilinx/bootgen.git
 
@@ -35,6 +30,13 @@ RUN make -j$N_CORES
 RUN ln /server/bootgen/bootgen /bin/bootgen
 
 WORKDIR /server
+
+
+COPY fCore_has /usr/bin/fCore_has
+COPY fCore_emu /usr/bin/fCore_emu
+COPY fCore_cc /usr/bin/fCore_cc
+COPY emulator_spec_schema.json /usr/local/etc/fcore_toolchain/emulator_spec_schema.json
+COPY compiler_spec_schema.json /usr/local/etc/fcore_toolchain/compiler_spec_schema.json
 
 COPY uscope_server .
 
