@@ -21,7 +21,7 @@ RUN apt update && apt-get install -y build-essential git pkg-config python3 pyth
 RUN pip3 install flask_jwt_extended --break-system-packages
 
 ARG N_CORES=12
-
+ARG SERVER_VER=no_version
 RUN --mount=type=ssh git clone https://github.com/Xilinx/bootgen.git
 
 WORKDIR /server/bootgen
@@ -43,4 +43,5 @@ COPY uscope_server .
 RUN key_1=$(openssl rand -hex 32) && key_2=$(openssl rand -hex 32) && cat server_config.py | sed -e "s/uScope-key/$key_1/" | sed -e "s/uScope-JWT-key/$key_2/" | tee server_config.py
 
 ENV USCOPE_DEPLOYMENT_OPTION DOCKER
+ENV UPLATFORM_SERVER_VERSION=$SERVER_VER
 CMD ["gunicorn", "-c", "gunicorn.py", "wsgi:app"]
