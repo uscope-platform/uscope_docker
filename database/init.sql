@@ -81,10 +81,11 @@ create table programs
             primary key,
     name    text,
     content text,
-    type    text,
-    hex     bigint[],
-    build_settings jsonb,
-    cached_bin_version text
+    type               text,
+    hex                bigint[],
+    build_settings     jsonb,
+    cached_bin_version text,
+    headers            integer[]
 );
 
 alter table programs
