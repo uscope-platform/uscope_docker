@@ -240,7 +240,9 @@ create table emulators
         constraint emulators_pk
             primary key,
     connections jsonb[],
-    n_cycles    integer
+    n_cycles    integer,
+    async_multirate boolean default false not null;
+
 );
 
 alter table emulators
