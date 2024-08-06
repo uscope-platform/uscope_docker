@@ -31,13 +31,6 @@ RUN ln /server/bootgen/bootgen /bin/bootgen
 
 WORKDIR /server
 
-
-COPY fCore_has /usr/bin/fCore_has
-COPY fCore_emu /usr/bin/fCore_emu
-COPY fCore_cc /usr/bin/fCore_cc
-COPY emulator_spec_schema.json /usr/local/etc/fcore_toolchain/emulator_spec_schema.json
-COPY compiler_spec_schema.json /usr/local/etc/fcore_toolchain/compiler_spec_schema.json
-
 COPY uscope_server .
 
 RUN key_1=$(openssl rand -hex 32) && key_2=$(openssl rand -hex 32) && cat server_config.py | sed -e "s/uScope-key/$key_1/" | sed -e "s/uScope-JWT-key/$key_2/" | tee server_config.py
