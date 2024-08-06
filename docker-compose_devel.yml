@@ -15,12 +15,6 @@
 
 version: '2'
 services:
-    redis:
-        image: redis:latest
-        networks:
-            - external_network
-        ports: 
-            - 6379:6379    
     database:
         image: database:latest
         networks:

@@ -44,10 +44,6 @@ services:
             - TEMPLATES_DIR=/server/fCore_compiler
         ports:
             - 8989:8989
-    redis_testing:
-        image: redis:latest
-        networks:
-            - internal_network
     database_testing:
         image: database_testing:latest
         networks:
