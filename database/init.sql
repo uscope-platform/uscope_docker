@@ -156,7 +156,8 @@ create table applications
     scripts text[],
     id                       serial
         constraint applications_pk
-            primary key
+            primary key,
+    pl_clocks                jsonb  default '{"0": 100000000, "1": 100000000, "2": 100000000, "3": 100000000}'::jsonb
 );
 
 alter table applications owner to uscope;
