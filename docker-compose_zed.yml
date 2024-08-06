@@ -39,7 +39,6 @@ services:
             - /home/root/db_backup:/db_backup
         environment:
             - DB_HOST=postgresql+psycopg2://uscope:test@database/uscope
-            - REDIS_HOST=redis
             - DRIVER_HOST=driver
             - TEMPLATES_DIR=/server/fCore_compiler
             - ARCH=zynqmp

@@ -38,7 +38,6 @@ services:
             - 8989:8989
         environment:
             - DB_HOST=postgresql+psycopg2://uscope:test@database/uscope
-            - REDIS_HOST=redis
             - DRIVER_HOST=driver
     database:
         image: database:latest
