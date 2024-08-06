@@ -242,7 +242,7 @@ create table emulators
             primary key,
     connections jsonb[],
     n_cycles    integer,
-    async_multirate boolean default false not null;
+    emulation_time double precision
 
 );
 
