@@ -17,7 +17,7 @@ FROM ubuntu:mantic
 
 WORKDIR /server
  
-RUN apt update && apt-get install -y build-essential git pkg-config python3 python3-sqlitedict python3-flask-restful gunicorn python3-pip python3-scipy python3-psycopg2 libffi8 python3-passlib python3-flask-cors python3-msgpack python3-flask openssl python3-argon2 python3-gunicorn python3-redis python3-sqlalchemy libssl-dev
+RUN apt update && apt-get install -y build-essential git pkg-config python3 python3-sqlitedict python3-flask-restful gunicorn python3-pip python3-scipy python3-psycopg2 libffi8 python3-passlib python3-flask-cors python3-msgpack python3-flask openssl python3-argon2 python3-gunicorn python3-redis python3-sqlalchemy python3-zmq libssl-dev
 RUN pip3 install flask_jwt_extended --break-system-packages
 
 ARG N_CORES=12
