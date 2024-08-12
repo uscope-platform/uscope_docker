@@ -242,8 +242,8 @@ create table emulators
             primary key,
     connections jsonb[],
     n_cycles    integer,
-    emulation_time double precision
-
+    emulation_time double precision,
+    deployment_mode boolean default false
 );
 
 alter table emulators
