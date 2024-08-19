@@ -16,7 +16,5 @@
 FROM ubuntu:mantic as RUNNER
 WORKDIR /driver
 COPY uscope_driver .
-COPY emulator_spec_schema.json  /usr/local/etc/fcore_toolchain/emulator_spec_schema.json
-COPY compiler_spec_schema.json  /usr/local/etc/fcore_toolchain/compiler_spec_schema.json
 
 CMD ["/driver/uscope_driver"]
