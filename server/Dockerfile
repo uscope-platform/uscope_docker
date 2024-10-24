@@ -17,7 +17,7 @@ FROM node:20
 
 WORKDIR /server
 
-RUN apt update && apt-get install -y git
+RUN apt update && apt-get install -y git libzmq3-dev
 
 RUN --mount=type=ssh git clone https://github.com/uscope-platform/uscope_server_js.git .
 
@@ -26,3 +26,4 @@ RUN npm install
 ENV USCOPE_DEPLOYMENT_OPTION DOCKER
 ENV UPLATFORM_SERVER_VERSION=$SERVER_VER
 CMD ["npm", "start"]
+
