@@ -13,12 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:20 
+FROM node:20-alpine 
 
+ARG VCPKG_FORCE_SYSTEM_BINARIES=1
 WORKDIR /server
-
-RUN apt update && apt-get install -y git libzmq3-dev
-
+RUN apk add git cmake ninja  zip unzip curl  alpine-sdk
 RUN --mount=type=ssh git clone https://github.com/uscope-platform/uscope_server_js.git .
 
 RUN npm install
