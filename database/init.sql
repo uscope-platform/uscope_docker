@@ -240,7 +240,7 @@ create table emulators
     id          integer not null
         constraint emulators_pk
             primary key,
-    connections jsonb[],
+    connections jsonb,
     n_cycles    integer,
     emulation_time double precision,
     deployment_mode boolean default false
