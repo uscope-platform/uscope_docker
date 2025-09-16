@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:jammy as RUNNER
+FROM ubuntu:plucky as RUNNER
 WORKDIR /driver
 COPY uscope_driver .
 CMD ["/driver/uscope_driver"]
