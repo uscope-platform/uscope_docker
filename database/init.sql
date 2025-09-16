@@ -26,13 +26,3 @@ ALTER DATABASE uscope OWNER TO uscope;
 -- CHANGE TO uscope database as uscope role
 
 \c uscope uscope
-
--- CREATE uscope SCHEMA
-
-CREATE SCHEMA uscope AUTHORIZATION uscope;
-grant usage on schema uscope TO uscope;
-grant create on schema uscope TO uscope;
-
--- CHANGE DEFAULT SCHEMA
-
-SET search_path TO uscope;
