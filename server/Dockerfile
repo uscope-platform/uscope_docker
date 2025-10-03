@@ -17,10 +17,8 @@ FROM node:20-alpine
 
 ARG VCPKG_FORCE_SYSTEM_BINARIES=1
 WORKDIR /server
-RUN apk add git cmake ninja  zip unzip curl  alpine-sdk
 
-ADD https://api.github.com/repos/uscope-platform/uscope_server/git/refs/heads/main /ver/version.json 
-RUN --mount=type=ssh git clone https://github.com/uscope-platform/uscope_server_js.git .
+COPY build /server
 
 RUN npm install
 
