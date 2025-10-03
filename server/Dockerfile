@@ -18,7 +18,7 @@ FROM node:20-alpine
 ARG VCPKG_FORCE_SYSTEM_BINARIES=1
 WORKDIR /server
 
-COPY build /server
+COPY server /server
 
 RUN npm install
 
