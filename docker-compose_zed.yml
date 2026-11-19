@@ -19,6 +19,7 @@ services:
         image: client:latest
         networks: 
             - external_network
+            - internal_network
         depends_on:
             - server
         ports:
@@ -30,7 +31,6 @@ services:
         tty: true
         image: server:latest
         networks:
-            
             - internal_network
             - external_network
         volumes: 
@@ -38,8 +38,9 @@ services:
             - /usr/bin/bootgen:/usr/bin/bootgen
             - /home/root/db_backup:/db_backup
         environment:
-            - DB_HOST=postgresql+psycopg2://uscope:test@database/uscope
+            - DATABASE_HOST=database
             - DRIVER_HOST=driver
+            - DRIVER_PORT=6666
             - TEMPLATES_DIR=/server/fCore_compiler
             - ARCH=zynqmp
         ports:
