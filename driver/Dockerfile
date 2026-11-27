@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:plucky as RUNNER
+FROM ubuntu:noble AS RUNNER
 WORKDIR /driver
 COPY uscope_driver .
 
