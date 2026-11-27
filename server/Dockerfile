@@ -13,18 +13,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:20-alpine 
+# ---- build stage: full toolchain, produces dist/uscope_server.js ----
+FROM node:20-alpine AS build
 
 ARG VCPKG_FORCE_SYSTEM_BINARIES=1
 WORKDIR /server
-
-RUN apk add git
 
 COPY code /server
 
 RUN npm install
 RUN npm run build
 
-ENV USCOPE_DEPLOYMENT_OPTION DOCKER
-CMD ["npm", "run", "start:prod"]
+# ---- runtime stage: production dependencies + bundle only ----
+FROM node:20-alpine
 
+ARG VCPKG_FORCE_SYSTEM_BINARIES=1
+WORKDIR /server
+
+COPY code/package.json /server/
+RUN npm install --omit=dev && npm cache clean --force
+
+COPY --from=build /server/dist /server/dist
+
+ARG VERSION=unknown
+ENV VERSION=$VERSION
+ENV USCOPE_DEPLOYMENT_OPTION=DOCKER
+CMD ["node", "--enable-source-maps", "dist/uscope_server.js"]
