@@ -23,7 +23,8 @@ RUN apk add git
 COPY code /server
 
 RUN npm install
+RUN npm run build
 
 ENV USCOPE_DEPLOYMENT_OPTION DOCKER
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:prod"]
 
