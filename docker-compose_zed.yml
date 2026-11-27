@@ -32,7 +32,6 @@ services:
         image: server:latest
         networks:
             - internal_network
-            - external_network
         volumes: 
             - /lib/firmware:/lib/firmware
             - /usr/bin/bootgen:/usr/bin/bootgen
@@ -43,8 +42,6 @@ services:
             - DRIVER_PORT=6666
             - TEMPLATES_DIR=/server/fCore_compiler
             - ARCH=zynqmp
-        ports:
-            - 8989:8989
     database:
         image: database:latest
         networks:
